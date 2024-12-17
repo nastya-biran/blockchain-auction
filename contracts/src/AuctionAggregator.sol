@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract AuctionAggregator is Ownable {
     event AuctionCreated(
-        string auction_type,
+        uint256 auction_type,
         address auc_address,
         address token,
         uint256 end_time,
@@ -31,7 +31,7 @@ contract AuctionAggregator is Ownable {
         ERC721(_nft).safeTransferFrom(msg.sender, address(auction), _token_id);
         auction.transferOwnership(msg.sender);
         auctions.push(address(auction));
-        emit AuctionCreated("english", address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
+        emit AuctionCreated(0, address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
         return auction;
     }
 
@@ -43,7 +43,7 @@ contract AuctionAggregator is Ownable {
         ERC721(_nft).safeTransferFrom(msg.sender, address(auction), _token_id);
         auction.transferOwnership(msg.sender);
         auctions.push(address(auction));
-        emit AuctionCreated("dutch", address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
+        emit AuctionCreated(1, address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
         return auction;
     }
 
@@ -54,7 +54,7 @@ contract AuctionAggregator is Ownable {
         ERC721(_nft).safeTransferFrom(msg.sender, address(auction), _token_id);
         auction.transferOwnership(msg.sender);
         auctions.push(address(auction));
-        emit AuctionCreated("most_fair", address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
+        emit AuctionCreated(2, address(auction), _token, auction.end_time(), auction.bid_limit(), _nft, _token_id);
         return auction;
     }
 
