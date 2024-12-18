@@ -48,7 +48,7 @@ contract EnglishAuction is IAuction {
         _returnAssets(msg.sender);
     }
 
-    function endAuction() public override onlyOwner returns (bool, uint256) {
+    function endAuction() public override returns (bool, uint256) {
         require(block.timestamp >= end_time, "Auction not yet ended");
         require(!ended, "Auction has already been ended");
 

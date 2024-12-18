@@ -53,6 +53,9 @@ contract TestNFT is ERC721URIStorage, Ownable {
 }
 
 contract AuctionScript is Script {
+    TestToken token = TestToken(0xf5335f67CD3efDC6cd509cB7562742dc4eaB5Db9);
+    TestNFT nft = TestNFT(0xa1EBC7FC4CE7228bb69F4858d02010F3cc9FBc19);
+    AuctionAggregator agg = AuctionAggregator(0xc7Fa3CaEB7d9BAD5C95EDC238f83101D7803B4b2);
 
     function setUp() public {}
 
@@ -61,22 +64,26 @@ contract AuctionScript is Script {
         address me = vm.addr(private_key);
         vm.startBroadcast(private_key);
 
-        AuctionAggregator agg = new AuctionAggregator();
+        /*AuctionAggregator agg = new AuctionAggregator();
 
         TestToken token = new TestToken(10000000, 1000);
-        TestNFT nft = new TestNFT();
+        TestNFT nft = new TestNFT();*/
 
-        uint256 token_id = nft.mint();
+        /*uint256 token_id = nft.mint();
         nft.approve(address(agg), token_id);
-        agg.CreateEnglishAuction(address(token), 10000, 0, address(nft), token_id);
+        agg.CreateEnglishAuction(address(token), 10000, 0, address(nft), token_id);*/
 
-        token_id = nft.mint();
-        nft.approve(address(agg), token_id);
-        agg.CreateDutchAuction(address(token), 10000, 100, address(nft), token_id, 1, 0);
+        for (int i = 0; i < 10; i++) {
+            uint256 token_id = nft.mint();
+            console.log(token_id);
+        }
 
-        token_id = nft.mint();
+        
+        //agg.CreateDutchAuction(address(token), 10000, 5, address(nft), token_id, 1, 100);
+
+        /*token_id = nft.mint();
         nft.approve(address(agg), token_id);
-        agg.CreateMostFairAuction(address(token), 10000, 100, address(nft), token_id);
+        agg.CreateMostFairAuction(address(token), 10000, 100, address(nft), token_id);*/
 
 
 
