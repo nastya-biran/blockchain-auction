@@ -27,7 +27,7 @@ contract DutchAuction is IAuction {
     function bid(uint256 amount) public override {
         require(block.timestamp < end_time, "Auction already ended");
         require(best_bidder == address(0), "The bid was set already");
-        require (amount == getCurrentPrice(), "Wrong bid amount");
+        require(amount == getCurrentPrice(), "Wrong bid amount");
 
         require(
             ERC20(auction_token).transferFrom(msg.sender, address(this), amount),

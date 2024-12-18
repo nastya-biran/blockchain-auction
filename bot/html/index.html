@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Auction</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.1/web3.min.js"
+      integrity="sha512-GKw4QT/RccGJIwQxY3MhyiQ5pHrhQ8SuKFEafV+WcpOvtz7iYFQuQGFCvmGlHLctJTe8KrWU1FqvF7VOkEAJtw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer">
+    </script>
+    <script>
+      window.onload = async (event) => {
+        // if (window.ethereum) {
+        //   window.web3 = new Web3(window.ethereum);
+        // }
+        window.aggregator_abi = JSON.parse('<<aggregator_abi>>');
+        window.erc721_abi = JSON.parse('<<erc721_abi>>');
+        window.data = JSON.parse('<<data>>');
+      };
+
+      const auth = async () => {
+        try {
+          const selectedAccount = await window.ethereum
+          .request({
+            method: "eth_requestAccounts",
+          })
+          .then((accounts) => accounts[0])
+          .catch(() => {
+            throw Error("Please select an account");
+          });
+          window.localStorage.setItem("account", selectedAccount);
+          window.account = selectedAccount;
+
+          document.querySelector(".account-address").innerHTML
+          = window.account;
+
+        } catch (error) {
+          alert(error);
+        }
+      };
+
+      const createAuc = async () => {
+        try {
+          web3 = new Web3(window.ethereum);
+          const nft = new web3.eth.Contract(window.erc721_abi, data["nft"]);
+          nft.methods
+            .approve("0xc7Fa3CaEB7d9BAD5C95EDC238f83101D7803B4b2", data["token_id"])
+            .send({ from: window.account });
+          const aggregator = new web3.eth.Contract(window.aggregator_abi, "0xc7Fa3CaEB7d9BAD5C95EDC238f83101D7803B4b2");
+
+          window.address = "No"
+          window.result = await aggregator.methods
+            .CreateEnglishAuction(data["token"], data["bidding_time"],
+              data["bid_limit"], data["nft"], data["token_id"])
+            .send({ from: window.account });
+
+          window.address = window.result.events.AuctionCreated.returnValues.auc_address
+          document.querySelector(".wallet-address").innerHTML
+            = window.address;
+        } catch (error) {
+          alert(error);
+        }
+      };
+    </script>
+</head>
+
+<body>
+  <section class="auth-section">
+      <button class="auth-btn" onclick="auth()">Auth</button>
+      <span class="instruction">
+        Ensure to have an Ethereum based wallet installed i.e MetaMask
+      </span>
+  </section>
+
+  <section class="go-section">
+      <button class="go-btn" onclick="createAuc()">Go</button>
+        Create auction
+      </span>
+  </section>
+
+  <section class="account-address-section">
+    Account Address:
+    <span class="account-address">
+      No
+    </span>
+  </section>
+
+  <section class="out-address-section">
+    Auction Address:
+    <span class="wallet-address">
+      No
+    </span>
+  </section>
+
+</body>
+</html>
